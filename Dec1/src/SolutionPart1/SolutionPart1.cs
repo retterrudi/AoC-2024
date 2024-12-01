@@ -25,6 +25,6 @@ public class SolutionPart1(string input)
             sum += Math.Abs(left[i] - right[i]);
         }
         
-        Console.WriteLine(sum);
+        Console.WriteLine($"Solution Part1: {sum}");
     }
 }
