@@ -16,7 +16,6 @@ public class SolutionPart2(string inputFile)
         Console.WriteLine($"Solution Part2: {result}");
     }
     
-    // Todo: If a check fails test the arrays without ith i + 1 th element
     private static bool IsArraySave(int[] array)
     {
         var increasing = IsArrayIncreasing(array);
