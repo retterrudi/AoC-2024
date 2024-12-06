@@ -19,20 +19,8 @@ public class SolutionPart2(string inputFile)
     // Todo: If a check fails test the arrays without ith i + 1 th element
     private static bool IsArraySave(int[] array)
     {
-        var increasing = false;
-        if (array.Length >= 2) 
-        {
-            if (array[0] < array[1])
-            {
-                increasing = true;
-            }
-        } 
-        else 
-        {
-            // Array with only 1 element
-            return true;
-        }
-        
+        var increasing = IsArrayIncreasing(array);
+
         for (var i = 0; i < array.Length - 1; i++)
         {
             if (increasing)
@@ -55,8 +43,8 @@ public class SolutionPart2(string inputFile)
         }
         return true;
     }
-    
-    private static bool IsArrayReallySave(int[] array)
+
+    private static bool IsArrayIncreasing(int[] array)
     {
         var increasing = false;
         if (array.Length >= 2) 
@@ -66,11 +54,18 @@ public class SolutionPart2(string inputFile)
                 increasing = true;
             }
         } 
-        else 
+        else
         {
             // Array with only 1 element
-            return true;
+            return increasing;
         }
+
+        return increasing;
+    }
+
+    private static bool IsArrayReallySave(int[] array)
+    {
+        var increasing = IsArrayIncreasing(array);
         
         for (var i = 0; i < array.Length - 1; i++)
         {
