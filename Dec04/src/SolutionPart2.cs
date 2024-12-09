@@ -12,7 +12,7 @@ public class SolutionPart2(string inputFile)
         Console.WriteLine($"Solution Part 1: {matchCounter}");
     }
 
-    private int FindWords(char[][] array)
+    private static int FindWords(char[][] array)
     {
         var matchCounter = 0;
         for (var y = 1; y < array.Length - 1; y++)
@@ -29,7 +29,7 @@ public class SolutionPart2(string inputFile)
         return matchCounter;
     }
 
-    private bool IsMatch(int x, int y, char[][] array)
+    private static bool IsMatch(int x, int y, char[][] array)
     {
         bool upperLeftLowerRight = (array[y - 1][x - 1] == 'M' && array[y + 1][x + 1] == 'S') 
                                    || (array[y - 1][x - 1] == 'S' && array[y + 1][x + 1] == 'M');
