@@ -26,33 +26,44 @@ internal class SolutionPart1(string inputFile)
         }
         PrintRuleGraph(ruleGraph);
         
-        var orders = splitInput[1].Split("\n");
+        var orders = splitInput[1]
+            .Split("\n")
+            .Select(orderList => 
+                orderList
+                .Split(",")
+                .Select(int.Parse)
+                .ToList()
+            ).ToArray();
 
         // Console.WriteLine($"Rules: \n{splitInput[0]}");
         // Console.WriteLine($"Orders: \n{splitInput[1]}");
-        
 
-        
+        var filteredOrders = orders
+            .Where(order => IsOrderCorrect(order, ruleGraph))
+            .Select(order => order[order.Count / 2])
+            .Aggregate(0, (acc, curr) => acc + curr);
 
+        Console.WriteLine($"Solution Part 1: {filteredOrders}");
     }
     
-    internal bool IsOrderCorrect(string order, Dictionary<int, List<int>> ruleGraph)
+    internal bool IsOrderCorrect(List<int> order, Dictionary<int, List<int>> ruleGraph)
     {
-        var listItems = order
-            .Split(",")
-            .Select(int.Parse)
-            .ToList();
-
-        for (var i = listItems.Count - 1; i >= 0; i--)
+        for (var i = 0; i < order.Count; i++)
         {
-            
-            
+            for (var j = 0; j < i; j++)
+            {
+                if (!ruleGraph.ContainsKey(order[i]))
+                {
+                    continue;
+                }
+                if (ruleGraph[order[i]].Contains(order[j]))
+                {
+                    return false;
+                }
+            }
         }
-    }
-    
-    internal bool IsWrongOrder(int node, List<int> nodes, Dictionary<int, List<int>> ruleGraph)
-    {
-        List<int> closedNodes = [];
+
+        return true;
     }
     
     internal void AddNodesToGraph(
