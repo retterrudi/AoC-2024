@@ -28,7 +28,6 @@ internal class SolutionPart1(string inputFile)
 
     private int CountSteps(Point startingPoint, Direction startingDirection, char[][] array)
     {
-        // var counter = 1;
         var currentPoint = startingPoint;
         var currentDirection = startingDirection;
         array[currentPoint.Y][currentPoint.X] = 'X';
@@ -37,7 +36,6 @@ internal class SolutionPart1(string inputFile)
         while (followPath)
         {
             var move = MoveIsPossible(currentPoint, currentDirection, array);
-
             switch (move)
             {
                 case MoveOutCome.Valid:
@@ -63,15 +61,7 @@ internal class SolutionPart1(string inputFile)
     
     private MoveOutCome MoveIsPossible(Point position, Direction direction, char[][] array)
     {
-        var change = direction switch
-        {
-            Direction.Up => new Point(0, -1),
-            Direction.Right => new Point(1, 0),
-            Direction.Down => new Point(0, 1),
-            Direction.Left => new Point(-1, 0),
-            _ => throw new ArgumentOutOfRangeException(nameof(direction), "Direction error")
-        };
-        var nextPoint = position + change;
+        var nextPoint = position + direction;
         
         if (PointOutOffBounds(nextPoint, array))
         {
@@ -105,49 +95,9 @@ internal class SolutionPart1(string inputFile)
     
     private bool PointOutOffBounds(Point point, char[][] array)
     {
-        return point.Y >= array.Length || point.X >= array[0].Length || point.X < 0 || point.Y < 0;
+        return point.Y >= array.Length
+           || point.Y < 0
+           || point.X >= array[0].Length
+           || point.X < 0;
     }
-}
-
-public record Point(int X, int Y)
-{
-    public static Point operator +(Point left, Point right)
-    {
-        return new Point(left.X + right.X, left.Y + right.Y);
-    }
-    
-    public static Point operator +(Point left, Direction right)
-    {
-        return right switch
-        {
-            Direction.Right => left + new Point(1, 0),
-            Direction.Down => left + new Point(0, 1),
-            Direction.Left => left + new Point(-1, 0),
-            Direction.Up => left + new Point(0, -1),
-            _ => throw new ArgumentOutOfRangeException(nameof(right), right, null)
-        };
-    }
-}
-
-public enum Direction
-{
-    Up,
-    Right,
-    Down,
-    Left
-}
-
-public static class DirectionExtensions
-{
-    public static Direction Next(this Direction direction)
-    {
-        return (Direction)((int)(direction + 1) % 4);
-    }
-}
-
-internal enum MoveOutCome
-{
-    Valid,
-    Obstacle,
-    OutOfBounds
 }
