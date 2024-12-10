@@ -1,3 +1,5 @@
+namespace Dec05;
+
 internal class SolutionPart1(string inputFile)
 {
     
@@ -6,7 +8,33 @@ internal class SolutionPart1(string inputFile)
         var plainInput = File.ReadAllText(inputFile);
         var splitInput = plainInput.Split("\n\n", 2);
         
-        var rules = splitInput[0]
+        var ruleGraph = CreateRuleGraph(splitInput[0]);
+        var result = CalculateResult(rawOrders: splitInput[1], ruleGraph);
+
+        Console.WriteLine($"Solution Part 1: {result}");
+    }
+
+    private static int CalculateResult(string rawOrders, Dictionary<int, List<int>> ruleGraph)
+    {
+        var orders = rawOrders
+            .Split("\n")
+            .Select(orderList => 
+                orderList
+                    .Split(",")
+                    .Select(int.Parse)
+                    .ToList()
+            ).ToArray();
+
+        var result = orders
+            .Where(order => IsOrderCorrect(order, ruleGraph))
+            .Select(order => order[order.Count / 2])
+            .Aggregate(0, (acc, curr) => acc + curr);
+        return result;
+    }
+
+    private static Dictionary<int, List<int>> CreateRuleGraph(string splitInput)
+    {
+        var rules = splitInput
             .Split("\n")
             .Select(line =>
             {
@@ -24,39 +52,21 @@ internal class SolutionPart1(string inputFile)
                 rule.SmallNode, 
                 ruleGraph);
         }
-        PrintRuleGraph(ruleGraph);
-        
-        var orders = splitInput[1]
-            .Split("\n")
-            .Select(orderList => 
-                orderList
-                .Split(",")
-                .Select(int.Parse)
-                .ToList()
-            ).ToArray();
 
-        // Console.WriteLine($"Rules: \n{splitInput[0]}");
-        // Console.WriteLine($"Orders: \n{splitInput[1]}");
-
-        var filteredOrders = orders
-            .Where(order => IsOrderCorrect(order, ruleGraph))
-            .Select(order => order[order.Count / 2])
-            .Aggregate(0, (acc, curr) => acc + curr);
-
-        Console.WriteLine($"Solution Part 1: {filteredOrders}");
+        return ruleGraph;
     }
-    
-    internal bool IsOrderCorrect(List<int> order, Dictionary<int, List<int>> ruleGraph)
+
+    private static bool IsOrderCorrect(List<int> order, Dictionary<int, List<int>> ruleGraph)
     {
-        for (var i = 0; i < order.Count; i++)
+        for (var orderIndex = 0; orderIndex < order.Count; orderIndex++)
         {
-            for (var j = 0; j < i; j++)
+            for (var previousOrderIndex = 0; previousOrderIndex < orderIndex; previousOrderIndex++)
             {
-                if (!ruleGraph.ContainsKey(order[i]))
+                if (!ruleGraph.ContainsKey(order[orderIndex]))
                 {
                     continue;
                 }
-                if (ruleGraph[order[i]].Contains(order[j]))
+                if (ruleGraph[order[orderIndex]].Contains(order[previousOrderIndex]))
                 {
                     return false;
                 }
@@ -65,8 +75,8 @@ internal class SolutionPart1(string inputFile)
 
         return true;
     }
-    
-    internal void AddNodesToGraph(
+
+    private static void AddNodesToGraph(
         int node, 
         int smallerNode, 
         Dictionary<int, List<int>> graph)
@@ -83,19 +93,4 @@ internal class SolutionPart1(string inputFile)
             }
         }
     }
-    
-    internal void PrintRuleGraph(Dictionary<int, List<int>> ruleGraph)
-    {
-        foreach (var (node, smallerNodes) in ruleGraph)
-        {
-            var nodes = "";
-            foreach (var smallerNode in smallerNodes)
-            {
-                nodes += smallerNode.ToString() + ", ";
-            }
-            Console.WriteLine("Node " + node.ToString() + ": [" + nodes + "]");
-        }
-    }
 }
-
-internal record Rule(int BigNode, int SmallNode);
