@@ -1,4 +1,4 @@
-namespace Dec06;
+namespace Dec06.dataTypes;
 
 internal record Point(int X, int Y)
 {
