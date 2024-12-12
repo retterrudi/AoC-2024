@@ -23,7 +23,7 @@ create_project() {
   echo "Project '$project_name' created successfully!"
 }
 
-if [[ $# -eq 0 ]]; then
+if [ $# -eq 0 ]; then
   read -p "Enter project name: " project_name
   create_project "$project_name"
 else
