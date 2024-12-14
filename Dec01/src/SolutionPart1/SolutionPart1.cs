@@ -6,8 +6,8 @@ public class SolutionPart1(string input)
     {
         var lines = File.ReadLines(input);
 
-        List<int> left = new List<int>();
-        List<int> right = new List<int>();
+        var left = new List<int>();
+        var right = new List<int>();
 
         foreach (var line in lines)
         {
