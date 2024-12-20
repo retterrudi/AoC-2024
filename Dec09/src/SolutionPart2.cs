@@ -30,7 +30,7 @@ internal class SolutionPart2(string inputFile)
         spaces.Add(0);
 
         var memoryWithIds = memory.Select((length, index) => (length, index)).ToList();
-        var fileNumber = memoryWithIds.Count() - 1;
+        var fileNumber = memoryWithIds.Count - 1;
         
         while(fileNumber > 0)
         {
